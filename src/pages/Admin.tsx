@@ -26,7 +26,7 @@ import { auth, signInWithGoogle } from '../lib/firebase';
 import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 import BackButton from '../components/BackButton';
 
-const ADMIN_EMAIL = 'chargeev.uk@gmail.com';
+const ADMIN_EMAILS = ['chargeev.uk@gmail.com'];
 
 interface QuoteItem {
   id: string;
@@ -70,7 +70,7 @@ export default function Admin() {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        if (currentUser.email === ADMIN_EMAIL) {
+        if (ADMIN_EMAILS.includes(currentUser.email || '')) {
           loadData();
         } else {
           setError("Access Denied: You do not have admin privileges.");
@@ -203,7 +203,7 @@ export default function Admin() {
     );
   }
 
-  if (user.email !== ADMIN_EMAIL) {
+  if (!ADMIN_EMAILS.includes(user.email || '')) {
     return (
       <main className="min-h-screen bg-slate-950 flex shadow-2xl items-center justify-center px-6">
         <motion.div 
