@@ -1,0 +1,8 @@
+{
+  "name": "Chargeev Manchester",
+  "description": "Certified EV charger installations for homes and businesses across Greater Manchester. Professional service, expert engineering, and OZEV grant handling.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": []
+}
