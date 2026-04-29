@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { MessageSquare } from 'lucide-react';
 import Logo from './Logo';
 
 export default function Footer() {
@@ -27,7 +28,13 @@ export default function Footer() {
         <div className="space-y-6 text-sm">
           <h5 className="font-bold uppercase tracking-widest text-slate-900 border-l-2 border-primary pl-4">Contact</h5>
           <div className="flex flex-col gap-4 text-slate-500 font-medium">
-            <span className="flex items-center gap-2 text-slate-900 font-bold">0800 123 4567</span>
+            <a 
+              href="https://wa.me/447476839393" 
+              className="flex items-center gap-2 text-slate-900 font-bold hover:text-primary transition-colors group"
+            >
+              <MessageSquare size={18} className="text-primary group-hover:scale-110 transition-transform" />
+              07476 839 393
+            </a>
             <span>hello@chargeev.uk</span>
             <span>Manchester</span>
           </div>

@@ -22,33 +22,36 @@ service cloud.firestore {
       return resource.data;
     }
 
+    function isAdmin() {
+      return isSignedIn() && 
+             request.auth.token.email == 'chargeev.uk@gmail.com' && 
+             request.auth.token.email_verified == true;
+    }
+
     // Validation helper for bookings
     function isValidBooking(data) {
-      return data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
-             data.email is string && data.email.matches('^[^@]+@[^@]+\\\\.[^@]+$') &&
-             (data.phone == null || (data.phone is string && data.phone.size() <= 20)) &&
-             data.address is string && data.address.size() > 0 && data.address.size() <= 500 &&
-             data.propertyType in ['home', 'business'] &&
-             (data.carModel == null || (data.carModel is string && data.carModel.size() <= 200)) &&
-             (data.chargerType == null || (data.chargerType is string && data.chargerType.size() <= 200)) &&
-             (data.installationLocation == null || (data.installationLocation is string && data.installationLocation.size() <= 200)) &&
-             (data.spareWays == null || (data.spareWays is string && data.spareWays.size() <= 50)) &&
-             (data.cableRun == null || (data.cableRun is string && data.cableRun.size() <= 100)) &&
-             data.preferredDate is timestamp &&
-             data.status in ['pending', 'confirmed', 'completed', 'cancelled'] &&
-             data.createdAt is timestamp;
+      return data.get('name', '') is string && data.get('name', '').size() > 0 && data.get('name', '').size() <= 100 &&
+             data.get('email', '') is string && data.get('email', '').matches('^[^@]+@[^@]+\\\\.[^@]+$') &&
+             (!('phone' in data) || (data.phone == null || (data.phone is string && data.phone.size() <= 20))) &&
+             data.get('address', '') is string && data.get('address', '').size() > 0 && data.get('address', '').size() <= 500 &&
+             data.get('propertyType', 'home') in ['home', 'business'] &&
+             (!('carModel' in data) || (data.carModel == null || (data.carModel is string && data.carModel.size() <= 200))) &&
+             (!('chargerType' in data) || (data.chargerType == null || (data.chargerType is string && data.chargerType.size() <= 200))) &&
+             (!('installationLocation' in data) || (data.installationLocation == null || (data.installationLocation is string && data.installationLocation.size() <= 200))) &&
+             (!('spareWays' in data) || (data.spareWays == null || (data.spareWays is string && data.spareWays.size() <= 50))) &&
+             (!('cableRun' in data) || (data.cableRun == null || (data.cableRun is string && data.cableRun.size() <= 100))) &&
+             data.get('preferredDate', null) is timestamp &&
+             data.get('status', 'pending') in ['pending', 'confirmed', 'completed', 'cancelled'] &&
+             data.get('createdAt', null) is timestamp;
     }
 
     match /bookings/{bookingId} {
-      // Allow creation by anyone (lead generation)
       allow create: if isValidId(bookingId) && 
                       isValidBooking(incoming()) &&
                       incoming().status == 'pending' &&
                       incoming().createdAt == request.time;
       
-      // Allow read/update/delete only if admin
-      // In a real app, we might check an 'admins' collection
-      allow read, update, delete: if isSignedIn() && request.auth.token.email_verified == true;
+      allow read, update, delete: if isAdmin();
     }
   }
 }

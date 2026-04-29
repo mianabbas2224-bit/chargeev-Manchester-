@@ -473,7 +473,7 @@ export default function Admin() {
               </div>
             ) : bookings.length === 0 ? (
               <div className="p-32 bg-white rounded-[80px] border border-slate-100 text-center">
-                <Zap size={80} className="text-slate-100 mx-auto mb-8" />
+                <Logo iconOnly className="mx-auto mb-8 opacity-20 scale-150" />
                 <h3 className="text-3xl font-black text-slate-900 mb-4">Vault is empty</h3>
                 <p className="text-slate-400 font-medium text-lg max-w-md mx-auto">Once customers submit quote requests, they will populate here in real-time.</p>
               </div>
@@ -494,7 +494,7 @@ export default function Admin() {
                           <div className={`w-16 h-16 rounded-[22px] flex items-center justify-center ${
                             booking.propertyType === 'home' ? 'bg-blue-50 text-blue-500' : 'bg-orange-50 text-orange-500'
                           }`}>
-                            <Zap size={28} />
+                            <Logo iconOnly className="scale-75" />
                           </div>
                           <div>
                             <h4 className="text-3xl font-black text-slate-900 tracking-tight">{booking.name}</h4>
@@ -514,7 +514,7 @@ export default function Admin() {
                       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 pt-4">
                         <div className="flex items-start gap-4">
                           <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-300">
-                             <Zap size={18} />
+                             <Logo iconOnly className="scale-50 grayscale opacity-50" />
                           </div>
                           <div>
                             <div className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-1 italic">Equipment</div>

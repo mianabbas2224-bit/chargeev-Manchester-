@@ -1,5 +1,6 @@
 import { motion } from 'motion/react';
 import { Link, useNavigate } from 'react-router-dom';
+import { MessageSquare } from 'lucide-react';
 import Logo from './Logo';
 
 export default function Navbar() {
@@ -21,9 +22,12 @@ export default function Navbar() {
           <Link to="/solar-ev" className="hover:text-primary transition-colors">Solar + EV</Link>
           <Link to="/ozev-grants" className="hover:text-primary transition-colors">Grants</Link>
           <div className="h-4 w-[1px] bg-slate-200"></div>
-          <a href="tel:08001234567" className="text-slate-900 flex items-center gap-2">
-            <span className="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-            0800 123 4567
+          <a 
+            href="https://wa.me/447476839393" 
+            className="text-slate-900 flex items-center gap-2 hover:text-primary transition-colors group"
+          >
+            <MessageSquare size={16} className="text-primary group-hover:scale-110 transition-transform" />
+            07476 839 393
           </a>
           <Link 
             to="/#engine"
