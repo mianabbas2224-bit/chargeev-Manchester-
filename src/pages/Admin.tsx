@@ -100,9 +100,15 @@ export default function Admin() {
 
   const handleLogin = async () => {
     try {
+      setError(null);
       await signInWithGoogle();
-    } catch (err) {
-      setError("Login failed. Please try again.");
+    } catch (err: any) {
+      console.error("Login Error Details:", err);
+      if (err?.code === 'auth/unauthorized-domain') {
+        setError("Domain Error: Please add " + window.location.hostname + " to Firebase Authorized Domains.");
+      } else {
+        setError(err?.message || "Login failed. Please check your browser console for details.");
+      }
     }
   };
 
@@ -172,7 +178,7 @@ export default function Admin() {
           className="max-w-md w-full bg-white/5 border border-white/10 backdrop-blur-2xl p-12 rounded-[50px] text-center"
         >
           <div className="w-24 h-24 bg-primary/20 rounded-[35px] flex items-center justify-center mx-auto mb-10 border border-primary/20">
-            <ShieldCheck size={48} className="text-primary" />
+            <Logo iconOnly />
           </div>
           <h2 className="text-4xl font-black text-white mb-6 tracking-tight">Backend <span className="text-primary italic">Access</span></h2>
           <p className="text-slate-400 font-medium mb-12 leading-relaxed text-lg">
@@ -199,18 +205,31 @@ export default function Admin() {
 
   if (user.email !== ADMIN_EMAIL) {
     return (
-      <main className="min-h-screen bg-slate-950 flex items-center justify-center text-center px-6">
-        <div className="max-w-md">
-           <XCircle size={80} className="text-red-500 mx-auto mb-8" />
-           <h2 className="text-4xl font-black text-white mb-6">Unauthorized</h2>
-           <p className="text-lg text-slate-400 mb-12 font-medium">Access denied. Your account does not have administrator privileges for the Chargeev Network.</p>
-           <button 
-             onClick={handleLogout}
-             className="px-12 py-5 bg-white/5 border border-white/10 text-white font-bold rounded-[25px] hover:bg-white/10 transition-all text-xl"
-           >
-             Switch Identity
-           </button>
-        </div>
+      <main className="min-h-screen bg-slate-950 flex shadow-2xl items-center justify-center px-6">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-md w-full bg-white/5 border border-white/10 backdrop-blur-2xl p-12 rounded-[50px] text-center"
+        >
+          <div className="w-24 h-24 bg-red-500/20 rounded-[35px] flex items-center justify-center mx-auto mb-10 border border-red-500/20">
+            <XCircle size={48} className="text-red-500" />
+          </div>
+          <h2 className="text-4xl font-black text-white mb-6 tracking-tight">Access <span className="text-red-500 italic">Denied</span></h2>
+          <p className="text-slate-400 font-medium mb-12 leading-relaxed text-lg">
+            Unauthorized: <strong>{user.email}</strong> does not have administrator privileges.
+          </p>
+          <div className="space-y-4">
+            <button 
+              onClick={handleLogout}
+              className="w-full py-5 bg-white text-slate-950 font-black rounded-[25px] hover:bg-primary transition-all flex items-center justify-center gap-3 text-xl group"
+            >
+              Switch Account
+            </button>
+            <div className="pt-4">
+              <BackButton label="Return to Website" />
+            </div>
+          </div>
+        </motion.div>
       </main>
     );
   }
@@ -375,9 +394,7 @@ export default function Admin() {
       <nav className="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-50">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Zap size={20} className="text-white fill-current" />
-            </div>
+            <Logo iconOnly className="!gap-0" />
             <div className="leading-none text-slate-900">
               <span className="text-lg font-black uppercase tracking-tighter block">Chargeev</span>
               <span className="text-[10px] font-bold text-primary uppercase tracking-widest leading-none">Admin Station</span>

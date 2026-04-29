@@ -96,19 +96,20 @@ export default function Home() {
       // 1. Save to Firestore (Native Backend)
       await createBooking(data);
       
-      // 2. Alert the Backend API (for Email Notifications)
-      await fetch('/api/quotes', {
+      // 2. Alert the Backend API (for Email Notifications) - Optional/Fire and forget
+      fetch('/api/quotes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
-      });
+      }).catch(err => console.error("Email notification failed:", err));
 
       setBookingStatus('success');
       reset();
       setTimeout(() => setBookingStatus('idle'), 5000);
     } catch (error) {
+      console.error("Firestore submission failed:", error);
       setBookingStatus('error');
     }
   };
